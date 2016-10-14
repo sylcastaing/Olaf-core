@@ -1,0 +1,57 @@
+{
+  "name": "olaf-core",
+  "version": "1.0.0",
+  "description": "Olaf API server",
+  "main": "app.js",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "body-parser": "^1.15.2",
+    "compression": "^1.6.2",
+    "connect-mongo": "^1.3.2",
+    "cookie-parser": "^1.4.3",
+    "errorhandler": "^1.4.3",
+    "express": "^4.14.0",
+    "express-jwt": "^5.1.0",
+    "express-session": "^1.14.1",
+    "johnny-five": "^0.10.1",
+    "lodash": "^4.16.4",
+    "lusca": "^1.4.1",
+    "method-override": "^2.3.6",
+    "mongoose": "^4.6.3",
+    "morgan": "^1.7.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.17.0",
+    "babel-preset-es2015": "^6.16.0",
+    "gulp": "^3.9.1",
+    "gulp-jshint": "^2.0.1",
+    "gulp-livereload": "^3.8.1",
+    "gulp-load-plugins": "^1.3.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-util": "^3.0.7",
+    "gulp-watch": "^4.3.10",
+    "jshint": "^2.9.3",
+    "jshint-stylish": "^2.2.1",
+    "lazypipe": "^1.0.1",
+    "nodemon": "^1.11.0"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sylcastaing/Olaf-core.git"
+  },
+  "author": "sylcastaing",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sylcastaing/Olaf-core/issues"
+  },
+  "homepage": "https://github.com/sylcastaing/Olaf-core#readme",
+  "engines": {
+    "node": "^4.4.0",
+    "npm": "^2.14.20"
+  }
+}
