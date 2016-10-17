@@ -10,11 +10,13 @@ var plugins = gulpLoadPlugins();
 
 const paths = {
   scripts: [
-    '/**/!(*.spec|*.integration).js',
+    './**/!(*.spec|*.integration).js',
     '!/config/local.env.sample.js'
   ],
   test: [
-    '/**/*.'
+    './**/*.integration.js',
+    './**/*.spec.js',
+    'mocha.global.js'
   ]
 };
 
@@ -30,8 +32,17 @@ var onError = function(err) {
 }
 
 let lintServerScripts = lazypipe()
-    .pipe(plugins.jshint, '.jshintrc')
-    .pipe(plugins.jshint.reporter, 'jshint-stylish');
+  .pipe(plugins.jshint, '.jshintrc')
+  .pipe(plugins.jshint.reporter, 'jshint-stylish');
+
+let mocha = lazypipe()
+  .pipe(plugins.mocha, {
+      reporter: 'spec',
+      timeout: 5000,
+      require: [
+          './mocha.conf'
+      ]
+  });
 
 gulp.task('start', ['watch'], () => {
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
@@ -59,6 +70,8 @@ gulp.task('watch', () => {
     .pipe(plugins.livereload());
 });
 
-gulp.task('test', function() {
-  //return gulp.src()
+gulp.task('test', () => {
+  process.env.NODE_ENV = process.env.NODE_ENV || 'test';
+  gulp.src(paths.test)
+    .pipe(mocha());
 });

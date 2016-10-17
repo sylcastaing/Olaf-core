@@ -23,10 +23,14 @@ mongoose.connection.on('error', function (err) {
 var app = express();
 var server = http.createServer(app);
 
+if (config.seedDB) {
+  require('./config/seed');
+}
+
 // Configure Express
 require('./config/express').default(app);
 
-// Exposes routes
+// Expose routes
 require('./routes').default(app);
 
 // Start server function
