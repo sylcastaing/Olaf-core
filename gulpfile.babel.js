@@ -12,6 +12,9 @@ const paths = {
   scripts: [
     '/**/!(*.spec|*.integration).js',
     '!/config/local.env.sample.js'
+  ],
+  test: [
+    '/**/*.'
   ]
 };
 
@@ -37,6 +40,13 @@ gulp.task('start', ['watch'], () => {
     .on('exit', onError);
 });
 
+gulp.task('start:prod', () => {
+  process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+  nodemon('-w').on('log', onServerLog)
+    .on('crash', onError)
+    .on('exit', onError);
+});
+
 gulp.task('lint', () => {
   return gulp.src(paths.scripts)
     .pipe(lintServerScripts());
@@ -47,4 +57,8 @@ gulp.task('watch', () => {
     .pipe(plugins.plumber())
     .pipe(lintServerScripts())
     .pipe(plugins.livereload());
+});
+
+gulp.task('test', function() {
+  //return gulp.src()
 });
