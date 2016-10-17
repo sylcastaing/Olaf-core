@@ -10,8 +10,6 @@ import mongoose from 'mongoose';
 mongoose.Promise = require('bluebird');
 import http from 'http';
 
-import * as arduino from './arduino/johnny-five';
-
 // Connect to MongoDB
 mongoose.connect(config.mongo.uri, config.mongo.options);
 mongoose.connection.on('error', function (err) {
@@ -39,9 +37,6 @@ function startServer() {
     console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
   });
 }
-
-// Init Arduino
-arduino.init();
 
 setImmediate(startServer);
 

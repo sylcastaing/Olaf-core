@@ -2,10 +2,24 @@
 
 import five from 'johnny-five';
 
-// Initialize Board
-var Board = new five.Board();
-
+/**
+ * Init function for arduino Board
+ * 
+ * @export
+ */
 export function init() {
-  console.log("TODO Arduino"); 
+  // Initialize Board
+  var Board = new five.Board();
+}
+
+/**
+ * Round value to 1 digit
+ * 
+ * @param {any} value
+ * @returns int round value
+ */
+function round(value) {
+  result = parsInt(value);
+  return (!isNan(result) ? Math.round(value * 10) / 10 : value);
 }
 

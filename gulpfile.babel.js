@@ -72,6 +72,6 @@ gulp.task('watch', () => {
 
 gulp.task('test', () => {
   process.env.NODE_ENV = process.env.NODE_ENV || 'test';
-  gulp.src(paths.test)
+  return gulp.src(paths.test)
     .pipe(mocha());
 });

@@ -4,6 +4,7 @@
 
 'use strict';
 
+import * as arduino from '../arduino/johnny-five';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import config from './environment';
@@ -48,7 +49,7 @@ export default function(app) {
    * Lusca - express server security
    * https://github.com/krakenjs/lusca
    */
-  if (env === 'production' && !process.env.SAUCE_USERNAME) {
+  if ('production' === env && !process.env.SAUCE_USERNAME) {
     app.use(lusca({
       csrf: {
         angular: true
@@ -61,9 +62,12 @@ export default function(app) {
       },
       xssProtection: true
     }));
+    arduino.init();
   }
-
-  if ('development' === env || 'test' === env) {
+  else if ('development' === env) {
+    arduino.init();
+  }
+  else if ('test' === env) {
     app.use(errorHandler());
   }
 }
