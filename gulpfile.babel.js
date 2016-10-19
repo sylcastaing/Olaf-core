@@ -35,12 +35,16 @@ let lintServerScripts = lazypipe()
   .pipe(plugins.jshint, '.jshintrc')
   .pipe(plugins.jshint.reporter, 'jshint-stylish');
 
+let lintServerTestScripts = lazypipe()
+    .pipe(plugins.jshint, '.jshintrc-spec')
+    .pipe(plugins.jshint.reporter, 'jshint-stylish');
+
 let mocha = lazypipe()
   .pipe(plugins.mocha, {
       reporter: 'spec',
       timeout: 5000,
       require: [
-          './mocha.conf'
+        './mocha.conf'
       ]
   });
 
@@ -65,6 +69,11 @@ gulp.task('lint', () => {
     .pipe(lintServerScripts());
 });
 
+gulp.task('lint:test', () => {
+  return gulp.src(paths.test)
+    .pipe(lintServerTestScripts());
+});
+
 gulp.task('watch', () => {
   plugins.watch(paths.scripts)
     .pipe(plugins.plumber())
@@ -75,5 +84,6 @@ gulp.task('watch', () => {
 gulp.task('test', () => {
   process.env.NODE_ENV = process.env.NODE_ENV || 'test';
   return gulp.src(paths.test)
+    .pipe(lintServerTestScripts())
     .pipe(mocha());
 });
