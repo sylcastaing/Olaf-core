@@ -43,5 +43,7 @@ export function search(req, res) {
       }
     }).exec()
     .then(respondWithResult(res))
-    .catch(handleError(res));
+    .catch(handleError(res, 400));
 }
+
+
