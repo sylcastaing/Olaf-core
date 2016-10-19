@@ -9,6 +9,7 @@ var WeatherSchema = new mongoose.Schema({
   },
   type: {
     type: String,
+    enum: ['pressure', 'indoorTemp', 'outdoorTemp'],
     required: true
   },
   value: {
