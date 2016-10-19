@@ -10,6 +10,8 @@ module.exports = {
   },
 
   // Seed database on startup
-  seedDB: true
+  seedDB: true,
 
+  // Freq in ms for weather mesure
+  johnnyfivefreq: 600000
 };

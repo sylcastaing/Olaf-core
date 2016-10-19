@@ -39,7 +39,10 @@ var all = {
         safe: true
       }
     }
-  }
+  },
+
+  // Freq in ms for weather mesure
+  johnnyfivefreq: 1800000
 };
 
 // Export the config object based on the NODE_ENV

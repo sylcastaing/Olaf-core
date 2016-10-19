@@ -2,6 +2,7 @@
 
 import five from 'johnny-five';
 import Weather from '../api/weather/weather.model';
+import config from '../config/environment';
 
 /**
  * Init function for arduino Board
@@ -17,7 +18,7 @@ export function init() {
      // Indoor Temperature
     new five.Thermometer({
       pin: 'A0',
-      freq: 1000,
+      freq: config.johnnyfivefreq,
       toCelsius: function (raw) {
         var CELSIUS_TO_KELVIN = 273.15;
         var adcres = 1023;
@@ -38,7 +39,7 @@ export function init() {
     new five.Thermometer({
       controller: 'DS18B20',
       pin: 2,
-      freq: 1000
+      freq: config.johnnyfivefreq
     }).on('data', function () {
       saveWeather('outdoorTemp', round(this.celsius));
     });
@@ -46,7 +47,7 @@ export function init() {
     // Pressure
     new five.Barometer({
       controller: 'BMP085',
-      freq: 1000
+      freq: config.johnnyfivefreq
     }).on('data', function () {
       saveWeather('pressure', round(this.pressure * 10));
     });
