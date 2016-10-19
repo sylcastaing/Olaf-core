@@ -44,6 +44,8 @@ let mocha = lazypipe()
       ]
   });
 
+gulp.task('default', ['start']);
+
 gulp.task('start', ['watch'], () => {
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
   nodemon('-w').on('log', onServerLog)
