@@ -20,10 +20,14 @@ mongoose.connection.on('error', function (err) {
 // Create App and Server
 var app = express();
 var server = http.createServer(app);
+var socketio = require('socket.io')(server);
 
 if (config.seedDB) {
   require('./config/seed');
 }
+
+// Configure socket
+require('./config/socketio');
 
 // Configure Express
 require('./config/express').default(app);
