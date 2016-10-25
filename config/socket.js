@@ -4,6 +4,8 @@
  * Socket.io configuration
  */
 
+import config from './environment';
+
 // When the user disconnects
 function onDisconnect(socket) {
 
@@ -18,6 +20,11 @@ function onConnect(socket) {
 }
 
 export default function(socketio) {
+
+  socketio.use(require('socketio-jwt').authorize({
+    secret: config.secrets.session,
+    handshake: true
+  }));
 
   socketio.on('connection', function(socket) {
     socket.address = socket.request.connection.remoteAddress + ':' + socket.request.connection.remotePort;
