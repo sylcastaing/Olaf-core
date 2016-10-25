@@ -41,6 +41,9 @@ var all = {
     }
   },
 
+  // List of users roles
+  userRoles: ['user', 'admin'],
+
   // Freq in ms for weather mesure
   johnnyfivefreq: 1800000
 };
