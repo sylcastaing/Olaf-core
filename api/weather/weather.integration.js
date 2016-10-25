@@ -28,7 +28,7 @@ describe('Weather API:', function () {
     })
   });
 
-  describe('GET /api/weather/:start/:end', function () {
+  describe('GET /api/weathers/:start/:end', function () {
     var token;
     var date = new Date();
     var weathers = [
@@ -66,14 +66,14 @@ describe('Weather API:', function () {
 
     it('should respond with a 401 when not authenticated', function(done) {
       request(app)
-        .get('/api/weather/a/b')
+        .get('/api/weathers/a/b')
         .expect(401)
         .end(done);
     });
 
     it('should respond with a 400 when invalid timestamp', function(done) {
       request(app)
-        .get('/api/weather/a/b')
+        .get('/api/weathers/a/b')
         .set('authorization', 'Bearer ' + token)
         .expect(400)
         .expect('Content-Type', /json/)
@@ -82,7 +82,7 @@ describe('Weather API:', function () {
 
     it('should respond with a 400 when invalid timestamp', function(done) {
       request(app)
-        .get('/api/weather/111111111111111111111111111111/11111111111111111111111111111')
+        .get('/api/weathers/111111111111111111111111111111/11111111111111111111111111111')
         .set('authorization', 'Bearer ' + token)
         .expect(400)
         .expect('Content-Type', /json/)
@@ -91,7 +91,7 @@ describe('Weather API:', function () {
 
     it('should respond with an array when valid timestamp', function(done) {
       request(app)
-        .get('/api/weather/' + (date.getTime() - 10) + '/' + (date.getTime() + 10))
+        .get('/api/weathers/' + (date.getTime() - 10) + '/' + (date.getTime() + 10))
         .set('authorization', 'Bearer ' + token)
         .expect(200)
         .expect('Content-Type', /json/)
