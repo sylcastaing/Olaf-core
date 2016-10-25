@@ -14,24 +14,26 @@ function onConnect(socket) {
     socket.log(JSON.stringify(data, null, 2));
   });
 
-  // TODO;
-  //require('')
+  require('../api/weather/weather.socket').register(socket);
 }
 
 export default function(socketio) {
 
-  socket.address = socket.request.connection.remoteAddress + ':' + socket.request.connection.remotePort;
-  socket.connectedAt = new Date();
+  socketio.on('connection', function(socket) {
+    socket.address = socket.request.connection.remoteAddress + ':' + socket.request.connection.remotePort;
 
-  socket.log = function(data) {
-    console.log('SocketIO ${socket.nsp.name} [${socket.address}]', data);
-  }
+    socket.connectedAt = new Date();
 
-  socket.on('disconnect', () => {
-    onDisconnect(socket);
-    socket.log('DISCONNECTED');
+    socket.log = function(data) {
+      console.log(`SocketIO ${socket.nsp.name} [${socket.address}]`, data);
+    };
+
+    socket.on('disconnect', () => {
+      onDisconnect(socket);
+      socket.log('DISCONNECTED');
+    });
+
+    onConnect(socket);
+    socket.log('CONNECTED');
   });
-
-  onConnect(socket);
-  socket.log('CONNECTED');
 }

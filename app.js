@@ -27,7 +27,7 @@ if (config.seedDB) {
 }
 
 // Configure socket
-require('./config/socketio');
+require('./config/socket').default(socketio);
 
 // Configure Express
 require('./config/express').default(app);
