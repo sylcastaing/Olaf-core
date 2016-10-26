@@ -9,6 +9,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 mongoose.Promise = require('bluebird');
 import http from 'http';
+import chalk from 'chalk';
 
 // Connect to MongoDB
 mongoose.connect(config.mongo.uri, config.mongo.options);
@@ -38,7 +39,7 @@ require('./routes').default(app);
 // Start server function
 function startServer() {
   app.olafCore = server.listen(config.port, config.ip, function() {
-    console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
+    console.log(chalk.green('Express server listening on ') + chalk.gray(config.port) + chalk.green(' in ') + chalk.gray(app.get('env')) + chalk.green(' mode !'));
   });
 }
 

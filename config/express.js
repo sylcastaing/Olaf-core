@@ -4,7 +4,8 @@
 
 'use strict';
 
-import * as arduino from '../arduino/johnny-five';
+import johnnyFive from '../arduino/johnny-five';
+import irRemote from '../arduino/ir-remote';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import config from './environment';
@@ -62,10 +63,12 @@ export default function(app) {
       },
       xssProtection: true
     }));
-    arduino.init();
+    johnnyFive();
+    irRemote();
   }
   else if ('development' === env) {
-    arduino.init();
+    johnnyFive();
+    irRemote();
   }
   else if ('test' === env) {
     app.use(errorHandler());

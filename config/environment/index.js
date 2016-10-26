@@ -44,6 +44,11 @@ var all = {
   // List of users roles
   userRoles: ['user', 'admin'],
 
+  arduinoPorts: {
+    johnnyFive: 'COM4',
+    irRemote: 'COM3'
+  },
+
   // Freq in ms for weather mesure
   johnnyfivefreq: 1800000
 };

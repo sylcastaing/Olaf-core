@@ -9,17 +9,23 @@ import config from '../config/environment';
  * 
  * @export
  */
-export function init() {
+export default function init() {
   // Initialize Board
-  var Board = new five.Board();
+  var Board = new five.Board({
+    port: config.arduinoPorts.johnnyFive
+  });
 
-  Board.on('ready', function() {
+  Board.on('error', () => {
+
+  });
+
+  Board.on('ready', () => {
 
      // Indoor Temperature
     new five.Thermometer({
       pin: 'A0',
       freq: config.johnnyfivefreq,
-      toCelsius: function (raw) {
+      toCelsius: (raw) => {
         var CELSIUS_TO_KELVIN = 273.15;
         var adcres = 1023;
         var beta = 3975;
@@ -31,7 +37,7 @@ export function init() {
 
         return tempc;
       }
-    }).on('data', function () {
+    }).on('data', () => {
       saveWeather('indoorTemp', round(this.celsius));
     });
 
@@ -40,7 +46,7 @@ export function init() {
       controller: 'DS18B20',
       pin: 2,
       freq: config.johnnyfivefreq
-    }).on('data', function () {
+    }).on('data', () => {
       saveWeather('outdoorTemp', round(this.celsius));
     });
 
@@ -48,7 +54,7 @@ export function init() {
     new five.Barometer({
       controller: 'BMP085',
       freq: config.johnnyfivefreq
-    }).on('data', function () {
+    }).on('data', () => {
       saveWeather('pressure', round(this.pressure * 10));
     });
   });

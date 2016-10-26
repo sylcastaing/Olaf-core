@@ -1,6 +1,7 @@
 'use strict';
 
 import User from '../api/user/user.model';
+import chalk from 'chalk';
 
 User.find({}).remove()
   .then(() => {
@@ -17,6 +18,6 @@ User.find({}).remove()
       password: 'admin'
     })
     .then(() => {
-      console.log('Finished populating users');
+      console.log(chalk.gray('Finished populating users'));
     });
   });
