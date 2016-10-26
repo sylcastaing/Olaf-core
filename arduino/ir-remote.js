@@ -1,5 +1,7 @@
 'use strict';
 
+import IrRemoteEvents from '../api/irremote/irremote.events';
+
 import SerialPort from 'serialport';
 import config from '../config/environment';
 import chalk from 'chalk';
@@ -20,6 +22,6 @@ export default function init() {
   });
 
   port.on('data', (data) => {
-    console.log(data);
+    IrRemoteEvents.emit('irin', data);
   });
 }

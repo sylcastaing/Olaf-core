@@ -37,7 +37,7 @@ export default function init() {
 
         return tempc;
       }
-    }).on('data', () => {
+    }).on('data', function() {
       saveWeather('indoorTemp', round(this.celsius));
     });
 
@@ -46,7 +46,7 @@ export default function init() {
       controller: 'DS18B20',
       pin: 2,
       freq: config.johnnyfivefreq
-    }).on('data', () => {
+    }).on('data', function() {
       saveWeather('outdoorTemp', round(this.celsius));
     });
 
@@ -54,7 +54,7 @@ export default function init() {
     new five.Barometer({
       controller: 'BMP085',
       freq: config.johnnyfivefreq
-    }).on('data', () => {
+    }).on('data', function() {
       saveWeather('pressure', round(this.pressure * 10));
     });
   });
