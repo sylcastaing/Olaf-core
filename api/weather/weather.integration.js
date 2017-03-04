@@ -53,13 +53,33 @@ describe('Weather API:', function () {
         .then(function() {
           return Weather.create([
             {
-              date: date,
+              date: date.getTime(),
               type: 'pressure',
               value: 1000
             }, {
-              date: date,
+              date: date.getTime(),
               type: 'outdoorTemp',
               value: 28
+            }, {
+              date: date.getTime() - 1000,
+              type: 'indoorTemp',
+              value: 26
+            }, {
+              date: date.getTime() + 1000,
+              type: 'indoorTemp',
+              value: 28
+            }, {
+              date: date.getTime() - 1000,
+              type: 'pressure',
+              value: 1002
+            }, {
+              date: date.getTime() + 1000,
+              type: 'pressure',
+              value: 1001
+            }, {
+              date: date.getTime() + 2500,
+              type: 'pressure',
+              value: 1001
             }
           ]);
         });
@@ -92,7 +112,7 @@ describe('Weather API:', function () {
 
     it('should respond with an array when valid timestamp', function(done) {
       request(app)
-        .get('/api/weathers/' + (date.getTime() - 10) + '/' + (date.getTime() + 10))
+        .get('/api/weathers/' + (date.getTime() - 2000) + '/' + (date.getTime() + 2000))
         .set('authorization', 'Bearer ' + token)
         .expect(200)
         .expect('Content-Type', /json/)
@@ -100,8 +120,17 @@ describe('Weather API:', function () {
           if (err) {
             return done(err);
           }
-          expect(res.body).to.be.instanceOf(Array);
-          expect(res.body).to.have.length(2);
+          expect(res.body).to.be.instanceOf(Object);
+          expect(res.body).to.not.be.instanceOf(Array);
+
+          expect(res.body.indoorTemps).to.be.instanceOf(Array);
+          expect(res.body.outdoorTemps).to.be.instanceOf(Array);
+          expect(res.body.pressures).to.be.instanceOf(Array);
+
+          expect(res.body.indoorTemps).to.have.length(2);
+          expect(res.body.outdoorTemps).to.have.length(1);
+          expect(res.body.pressures).to.have.length(3);
+
           done();
         });
     });

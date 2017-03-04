@@ -41,7 +41,22 @@ export function search(req, res) {
       $lte: new Date(parseInt(req.params.end)),
       $gt: new Date(parseInt(req.params.start))
     }
-  }).exec()
+  })
+  .sort('-date')
+  .exec()
+  .then((datas) => {
+    return {
+      indoorTemps: datas.filter((elem) => {
+        return elem.type === 'indoorTemp';
+      }),
+      outdoorTemps: datas.filter((elem) => {
+        return elem.type === 'outdoorTemp';
+      }),
+      pressures: datas.filter((elem) => {
+        return elem.type === 'pressure';
+      })
+    };
+  })
   .then(respondWithResult(res))
   .catch(handleError(res, 400));
 }
