@@ -7,6 +7,8 @@ import request from 'supertest';
 
 describe('Weather API:', function () {
   var user;
+  var token;
+  var date;
 
   // Clear users before testing
   before(function() {
@@ -21,47 +23,46 @@ describe('Weather API:', function () {
     });
   });
 
+  before(function(done) {
+    request(app)
+      .post('/auth/local')
+      .send({
+        email: 'test@example.com',
+        password: 'password'
+      })
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end((err, res) => {
+        token = res.body.token;
+        done();
+      });
+    });
+
   // Clear users and wheather after testing
   after(function() {
     return User.remove().then(function() {
-      return Weather.remove();
+      //return Weather.remove();
     })
   });
 
   describe('GET /api/weathers/:start/:end', function () {
-    var token;
-    var date = new Date();
-    var weathers = [
-      {
-        date: date,
-        type: 'pressure',
-        value: 1000
-      }, {
-        date: date,
-        type: 'outdoorTemp',
-        value: 28
-      }
-    ];
-
-    before(function(done) {
-      request(app)
-        .post('/auth/local')
-        .send({
-          email: 'test@example.com',
-          password: 'password'
-        })
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .end((err, res) => {
-          token = res.body.token;
-          done();
-        });
-    });
+    date = new Date();
 
     before(function() {
-      return Weather.remove().then(function() {
-        return Weather.create(weathers);
-      });
+      return Weather.remove()
+        .then(function() {
+          return Weather.create([
+            {
+              date: date,
+              type: 'pressure',
+              value: 1000
+            }, {
+              date: date,
+              type: 'outdoorTemp',
+              value: 28
+            }
+          ]);
+        });
     });
 
     it('should respond with a 401 when not authenticated', function(done) {
@@ -103,6 +104,210 @@ describe('Weather API:', function () {
           expect(res.body).to.have.length(2);
           done();
         });
+    });
+  });
+
+  describe('GET /api/weathers/indoorTemp/last', function () {
+    before(function() {
+      return Weather.remove()
+        .then(function() {
+          return Weather.create([
+            {
+              date: date.getTime(),
+              type: 'indoorTemp',
+              value: 25
+            }, {
+              date: date.getTime() - 10,
+              type: 'indoorTemp',
+              value: 24
+            }, {
+              date: date.getTime() + 10,
+              type: 'indoorTemp',
+              value: 26
+            }, {
+              date: date.getTime() - 12,
+              type: 'outdoorTemp',
+              value: 25
+            }
+          ]);
+        });
+    });
+
+    it('should respond with a 401 when not authenticated', function(done) {
+      request(app)
+        .get('/api/weathers/indoorTemp/last')
+        .expect(401)
+        .end(done);
+    });
+
+    it('should respond with an object with the last indoorTemp', function(done) {
+      request(app)
+        .get('/api/weathers/indoorTemp/last')
+        .set('authorization', 'Bearer ' + token)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res.body).to.not.be.instanceOf(Array);
+          expect(res.body).to.be.instanceOf(Object);
+          expect(res.body.type).to.be.equal('indoorTemp');
+          expect(new Date(res.body.date).getTime()).to.be.equal(date.getTime() + 10);
+          expect(res.body.value).to.be.equal(26);
+          done();
+        });
+    });
+
+    describe('If dataBase is empty', function() {
+      before(function() {
+        return Weather.remove();
+      });
+
+      it('should respond width null is no weather were found', function(done) {
+        request(app)
+        .get('/api/weathers/indoorTemp/last')
+        .set('authorization', 'Bearer ' + token)
+        .expect(404)
+        .expect('Content-Type', /json/)
+        .end(done);
+      });
+    });
+  });
+
+  describe('GET /api/weathers/outdoorTemp/last', function () {
+    before(function() {
+      return Weather.remove()
+        .then(function() {
+          return Weather.create([
+            {
+              date: date.getTime() + 10,
+              type: 'outdoorTemp',
+              value: 32
+            }, {
+              date: date.getTime() - 10,
+              type: 'outdoorTemp',
+              value: 26
+            }, {
+              date: date,
+              type: 'outdoorTemp',
+              value: 28
+            }, {
+              date: date.getTime() + 10,
+              type: 'indoorTemp',
+              value: 25
+            }
+          ]);
+        });
+    });
+
+    it('should respond with a 401 when not authenticated', function(done) {
+      request(app)
+        .get('/api/weathers/outdoorTemp/last')
+        .expect(401)
+        .end(done);
+    });
+
+    it('should respond with an object with the last outdoorTemp', function(done) {
+      request(app)
+        .get('/api/weathers/outdoorTemp/last')
+        .set('authorization', 'Bearer ' + token)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res.body).to.not.be.instanceOf(Array);
+          expect(res.body).to.be.instanceOf(Object);
+          expect(res.body.type).to.be.equal('outdoorTemp');
+          expect(new Date(res.body.date).getTime()).to.be.equal(date.getTime() + 10);
+          expect(res.body.value).to.be.equal(32);
+          done();
+        });
+    });
+
+    describe('If dataBase is empty', function() {
+      before(function() {
+        return Weather.remove();
+      });
+
+      it('should respond width null is no weather were found', function(done) {
+        request(app)
+        .get('/api/weathers/outdoorTemp/last')
+        .set('authorization', 'Bearer ' + token)
+        .expect(404)
+        .expect('Content-Type', /json/)
+        .end(done);
+      });
+    });
+  });
+
+  describe('GET /api/weathers/pressure/last', function () {
+    before(function() {
+      return Weather.remove().then(function() {
+        return Weather.create([
+          {
+            date: date.getTime() + 10,
+            type: 'pressure',
+            value: 1001
+          }, 
+          {
+            date: date,
+            type: 'pressure',
+            value: 1000
+          }, {
+            date: date,
+            type: 'outdoorTemp',
+            value: 28
+          }, {
+            date: date.getTime() + 10,
+            type: 'indoorTemp',
+            value: 26
+          }
+        ]);
+      });
+    });
+
+    it('should respond with a 401 when not authenticated', function(done) {
+      request(app)
+        .get('/api/weathers/pressure/last')
+        .expect(401)
+        .end(done);
+    });
+
+    it('should respond with an object with the last outdoorTemp', function(done) {
+      request(app)
+        .get('/api/weathers/pressure/last')
+        .set('authorization', 'Bearer ' + token)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res.body).to.not.be.instanceOf(Array);
+          expect(res.body).to.be.instanceOf(Object);
+          expect(res.body.type).to.be.equal('pressure');
+          expect(new Date(res.body.date).getTime()).to.be.equal(date.getTime() + 10);
+          expect(res.body.value).to.be.equal(1001);
+          done();
+        });
+    });
+
+    describe('If dataBase is empty', function() {
+      before(function() {
+        return Weather.remove();
+      });
+
+      it('should respond width null is no weather were found', function(done) {
+        request(app)
+        .get('/api/weathers/pressure/last')
+        .set('authorization', 'Bearer ' + token)
+        .expect(404)
+        .expect('Content-Type', /json/)
+        .end(done);
+      });
     });
   });
 });

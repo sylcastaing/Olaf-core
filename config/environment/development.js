@@ -13,5 +13,5 @@ module.exports = {
   seedDB: true,
 
   // Freq in ms for weather mesure
-  johnnyfivefreq: 6000000
+  johnnyfivefreq: 600000
 };

@@ -45,8 +45,8 @@ var all = {
   userRoles: ['user', 'admin'],
 
   arduinoPorts: {
-    johnnyFive: 'COM4',
-    irRemote: 'COM3'
+    johnnyFive: 'COM3',
+    irRemote: 'COM4'
   },
 
   // Freq in ms for weather mesure

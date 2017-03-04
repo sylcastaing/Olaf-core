@@ -4,15 +4,18 @@ var proxyquire = require('proxyquire').noPreserveCache();
 
 var weatherCtrlStub = {
   search: 'weatherCtrl.search',
+  getLastIndoorTemp: 'weatherCtrl.getLastIndoorTemp',
+  getLastOutdoorTemp: 'weatherCtrl.getLastOutdoorTemp',
+  getLastPressure: 'weatherCtrl.getLastPressure'
 };
 
 var authServiceStub = {
   isAuthenticated() {
-      return 'authService.isAuthenticated';
-    },
-    hasRole(role) {
-      return 'authService.hasRole.' + role;
-    }
+    return 'authService.isAuthenticated';
+  },
+  hasRole(role) {
+    return 'authService.hasRole.' + role;
+  }
 };
 
 var routerStub = {
@@ -37,12 +40,34 @@ describe('Weather API Router:', function () {
   });
 
   describe('GET /y/:start/:end', function () {
-
     it('should be authenticated and route to weather.controller.search', function () {
       expect(routerStub.get
         .withArgs('/:start/:end', 'authService.isAuthenticated', 'weatherCtrl.search')
       ).to.have.been.calledOnce;
     });
+  });
 
+  describe('GET /y/indoorTemp/last', function () {
+    it('should be authenticated and route to weather.controller.getLastIndoorTemp', function () {
+      expect(routerStub.get
+        .withArgs('/indoorTemp/last', 'authService.isAuthenticated', 'weatherCtrl.getLastIndoorTemp')
+      ).to.have.been.calledOnce;
+    });
+  });
+
+  describe('GET /y/outdoorTemp/last', function () {
+    it('should be authenticated and route to weather.controller.getLastOutdoorTemp', function () {
+      expect(routerStub.get
+        .withArgs('/outdoorTemp/last', 'authService.isAuthenticated', 'weatherCtrl.getLastOutdoorTemp')
+      ).to.have.been.calledOnce;
+    });
+  });
+
+  describe('GET /y/pressure/last', function () {
+    it('should be authenticated and route to weather.controller.getLastPressure', function () {
+      expect(routerStub.get
+        .withArgs('/pressure/last', 'authService.isAuthenticated', 'weatherCtrl.getLastPressure')
+      ).to.have.been.calledOnce;
+    });
   });
 });

@@ -7,7 +7,7 @@
 
 module.exports = {
   DOMAIN:           'http://localhost:9000',
-  SESSION_SECRET:   'olaf-secret',
+  SESSION_SECRET:   'olaf-secretqsd',
 
   // Control debug level for modules using visionmedia/debug
   DEBUG: ''
