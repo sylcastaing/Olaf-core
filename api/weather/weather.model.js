@@ -2,6 +2,8 @@
 
 import mongoose from 'mongoose';
 
+import { default as WeatherEvents, events } from './weather.events';
+
 var WeatherSchema = new mongoose.Schema({
   date: {
     type: Date,
@@ -17,5 +19,15 @@ var WeatherSchema = new mongoose.Schema({
     required: true
   }
 });
+
+for (var i in events) {
+  WeatherSchema.post(events[i], emit(events[i]));
+}
+
+function emit(event) {
+  return function(doc) {
+    WeatherEvents.emit('weather:' + event, doc);
+  }
+}
 
 export default mongoose.model('Weather', WeatherSchema);

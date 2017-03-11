@@ -5,24 +5,10 @@ import {
 }
 from 'events';
 import Weather from './weather.model';
-var WeatherEvents = new EventEmitter();
+let WeatherEvents = new EventEmitter();
 
 WeatherEvents.setMaxListeners(0);
 
-var events = {
-  'save': 'save'
-};
-
-for (var e in events) {
-  var event = events[e];
-  Weather.schema.post(e, emitEvent(event));
-}
-
-function emitEvent(event) {
-  return function(doc) {
-    WeatherEvents.emit(event + ':' + doc._id, doc);
-    WeatherEvents.emit(event, doc);
-  }
-}
+export const events = ['save'];
 
 export default WeatherEvents;

@@ -67,7 +67,7 @@ export default function init() {
  * @param {any} value
  */
 function saveWeather(type, value) {
-  new Weather({
+  return new Weather({
     date: new Date(),
     type: type,
     value: value

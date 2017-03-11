@@ -24,13 +24,17 @@ function onConnect(socket) {
 export default function(socketio) {
 
   if (process.env.NODE_ENV === 'production') {
-      socketio.use(require('socketio-jwt').authorize({
+    socketio.use(require('socketio-jwt').authorize({
       secret: config.secrets.session,
       handshake: true
     }));
   }
 
   socketio.on('connection', function(socket) {
+    socketio.emit('message', {
+      message: 'CONNECTED'
+    });
+
     socket.address = socket.request.connection.remoteAddress + ':' + socket.request.connection.remotePort;
 
     socket.connectedAt = new Date();

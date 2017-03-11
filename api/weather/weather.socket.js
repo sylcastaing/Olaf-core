@@ -1,17 +1,15 @@
 'use strict';
 
-import WeatherEvents from './weather.events';
-
-var events = ['save'];
+import { default as WeatherEvents, events } from './weather.events';
 
 export function register(socket) {
   // Bind model events to socket events
-  for (var i = 0, eventsLength = events.length; i < eventsLength; i++) {
-    var event = events[i];
-    var listener = createListener('weather:' + event, socket);
+  for (var i in events) {
 
-    WeatherEvents.on(event, listener);
-    socket.on('disconnect', removeListener(event, listener));
+    var listener = createListener('weather:' + events[i], socket);
+    WeatherEvents.on('weather:' + events[i], listener);
+
+    socket.on('disconnect', removeListener('weather:' + events[i], listener));
   }
 }
 
