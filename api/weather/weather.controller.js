@@ -78,6 +78,21 @@ export function getLastIndoorTemp(req, res) {
   .catch(handleError(res, 404));
 }
 
+export function getExtremeIndoorTemp(req, res) {
+  return Promise.all([
+    getExtreme(req.params.start, req.params.end, 'indoorTemp', 1),
+    getExtreme(req.params.start, req.params.end, 'indoorTemp', -1)
+  ])
+  .then((datas) => {
+    return {
+      min: datas[0],
+      max: datas[1]
+    };
+  })
+  .then(respondWithResult(res))
+  .catch(handleError(res, 400));
+}
+
 export function getLastOutdoorTemp(req, res) {
   return Weather.find({
     type: 'outdoorTemp'
@@ -95,6 +110,21 @@ export function getLastOutdoorTemp(req, res) {
   .catch(handleError(res, 404));
 }
 
+export function getExtremeOutdoorTemp(req, res) {
+  return Promise.all([
+    getExtreme(req.params.start, req.params.end, 'outdoorTemp', 1),
+    getExtreme(req.params.start, req.params.end, 'outdoorTemp', -1)
+  ])
+  .then((datas) => {
+    return {
+      min: datas[0],
+      max: datas[1]
+    };
+  })
+  .then(respondWithResult(res))
+  .catch(handleError(res, 400));
+}
+
 export function getLastPressure(req, res) {
   return Weather.find({
     type: 'pressure'
@@ -110,5 +140,50 @@ export function getLastPressure(req, res) {
   })
   .then(respondWithResult(res))
   .catch(handleError(res, 404));
+}
+
+export function getExtremePressure(req, res) {
+  return Promise.all([
+    getExtreme(req.params.start, req.params.end, 'pressure', 1),
+    getExtreme(req.params.start, req.params.end, 'pressure', -1)
+  ])
+  .then((datas) => {
+    return {
+      min: datas[0],
+      max: datas[1]
+    };
+  })
+  .then(respondWithResult(res))
+  .catch(handleError(res, 400));
+}
+
+/**
+ * getExtreme
+ * 
+ * @param {any} start 
+ * @param {any} end 
+ * @param {any} type 
+ * @param {any} sort 
+ * @returns 
+ */
+function getExtreme(start, end, type, sort) {
+  return Weather.find({
+    type: type,
+    date: {
+      $lte: new Date(parseInt(end)),
+      $gt: new Date(parseInt(start))
+    }
+  })
+  .sort({
+    value: sort
+  })
+  .limit(1)
+  .exec()
+  .then((datas) => {
+    if (datas.length > 0) {
+      return datas[0];
+    }
+    throw new Error();
+  });
 }
 

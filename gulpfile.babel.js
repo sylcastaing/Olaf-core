@@ -83,7 +83,7 @@ gulp.task('watch', () => {
 
 gulp.task('test', () => {
   process.env.NODE_ENV = process.env.NODE_ENV || 'test';
-  return gulp.src(paths.test)
+  gulp.src(paths.test)
     .pipe(lintServerTestScripts())
     .pipe(mocha());
 });

@@ -204,6 +204,61 @@ describe('Weather API:', function () {
     });
   });
 
+  describe('GET /api/weathers/indoorTemp/:start/:end/extreme', function () {
+    before(function() {
+      return Weather.remove()
+        .then(function() {
+          return Weather.create([
+            {
+              date: date.getTime(),
+              type: 'indoorTemp',
+              value: 25
+            }, {
+              date: date.getTime() - 1500,
+              type: 'indoorTemp',
+              value: 20
+            }, {
+              date: date.getTime() + 10,
+              type: 'indoorTemp',
+              value: 26
+            }, {
+              date: date.getTime() - 12,
+              type: 'outdoorTemp',
+              value: 24
+            }
+          ]);
+        });
+    });
+
+    it('should respond with a 401 when not authenticated', function(done) {
+      request(app)
+        .get('/api/weathers/indoorTemp/' + (date.getTime() - 1000) + '/' + (date.getTime() + 2000) + '/extreme')
+        .expect(401)
+        .end(done);
+    });
+
+    it('should respond with an object with min and max', function(done) {
+      request(app)
+        .get('/api/weathers/indoorTemp/' + (date.getTime() - 1000) + '/' + (date.getTime() + 2000) + '/extreme')
+        .set('authorization', 'Bearer ' + token)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res.body).to.not.be.instanceOf(Array);
+          expect(res.body).to.be.instanceOf(Object);
+          expect(res.body.min).to.be.instanceOf(Object);
+          expect(res.body.max).to.be.instanceOf(Object);
+          expect(res.body.min.value).to.be.equal(25);
+          expect(res.body.max.value).to.be.equal(26);
+
+          done();
+        });
+    });
+  });
+
   describe('GET /api/weathers/outdoorTemp/last', function () {
     before(function() {
       return Weather.remove()

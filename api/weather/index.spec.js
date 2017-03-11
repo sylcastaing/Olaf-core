@@ -39,18 +39,18 @@ describe('Weather API Router:', function () {
     expect(weatherIndex).to.equal(routerStub);
   });
 
-  describe('GET /y/:start/:end', function () {
-    it('should be authenticated and route to weather.controller.search', function () {
-      expect(routerStub.get
-        .withArgs('/:start/:end', 'authService.isAuthenticated', 'weatherCtrl.search')
-      ).to.have.been.calledOnce;
-    });
-  });
-
   describe('GET /y/indoorTemp/last', function () {
     it('should be authenticated and route to weather.controller.getLastIndoorTemp', function () {
       expect(routerStub.get
         .withArgs('/indoorTemp/last', 'authService.isAuthenticated', 'weatherCtrl.getLastIndoorTemp')
+      ).to.have.been.calledOnce;
+    });
+  });
+
+  describe('GET /y/indoorTemp/:start/:end/extreme', function () {
+    it('should be authenticated and route to weather.controller.getExtremeIndoorTemp', function () {
+      expect(routerStub.get
+        .withArgs('/indoorTemp/last', 'authService.isAuthenticated', 'weatherCtrl.getExtremeIndoorTemp')
       ).to.have.been.calledOnce;
     });
   });
@@ -63,10 +63,34 @@ describe('Weather API Router:', function () {
     });
   });
 
+  describe('GET /y/outdoorTemp/:start/:end/extreme', function () {
+    it('should be authenticated and route to weather.controller.getExtremeOutdoorTemp', function () {
+      expect(routerStub.get
+        .withArgs('/indoorTemp/last', 'authService.isAuthenticated', 'weatherCtrl.getExtremeOutdoorTemp')
+      ).to.have.been.calledOnce;
+    });
+  });
+
   describe('GET /y/pressure/last', function () {
     it('should be authenticated and route to weather.controller.getLastPressure', function () {
       expect(routerStub.get
         .withArgs('/pressure/last', 'authService.isAuthenticated', 'weatherCtrl.getLastPressure')
+      ).to.have.been.calledOnce;
+    });
+  });
+
+  describe('GET /y/pressure/:start/:end/extreme', function () {
+    it('should be authenticated and route to weather.controller.getExtremePressure', function () {
+      expect(routerStub.get
+        .withArgs('/indoorTemp/last', 'authService.isAuthenticated', 'weatherCtrl.getExtremePressure')
+      ).to.have.been.calledOnce;
+    });
+  });
+
+  describe('GET /y/:start/:end', function () {
+    it('should be authenticated and route to weather.controller.search', function () {
+      expect(routerStub.get
+        .withArgs('/:start/:end', 'authService.isAuthenticated', 'weatherCtrl.search')
       ).to.have.been.calledOnce;
     });
   });
