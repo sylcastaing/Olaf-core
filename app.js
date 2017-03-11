@@ -21,7 +21,7 @@ mongoose.connection.on('error', function (err) {
 // Create App and Server
 var app = express();
 var server = http.createServer(app);
-var socketio = require('socket.io')(server);
+var socketio = require('socket.io').listen(server);
 
 if (config.seedDB) {
   require('./config/seed');

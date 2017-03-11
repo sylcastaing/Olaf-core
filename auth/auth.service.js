@@ -27,13 +27,14 @@ export function isAuthenticated() {
     })
     // Attach user to request
     .use(function(req, res, next) {
-      User.findById(req.user._id).exec()
+      return User.findById(req.user._id).exec()
         .then(user => {
           if (!user) {
             return res.status(401).end();
           }
           req.user = user;
           next();
+          return user;
         })
         .catch(err => next(err));
     });
@@ -53,8 +54,9 @@ export function hasRole(roleRequired) {
       if (config.userRoles.indexOf(req.user.role) >=
           config.userRoles.indexOf(roleRequired)) {
         next();
+        return null;
       } else {
-        res.status(403).send('Forbidden');
+        return res.status(403).send('Forbidden');
       }
     });
 }
