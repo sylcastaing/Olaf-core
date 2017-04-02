@@ -48,26 +48,37 @@ export default function init() {
     lcd.on();
     lcd.home().print("Wesh alors ! ");
 
+    // Diplay elements on screen
     display();
 
+    /**
+     * Init buttons
+     */
     var prevButton = new five.Button(5);
     var nextButton = new five.Button(6);
     var screenOff;
 
-    // Turn screen on on press and turn off after 5sec
+    /**
+     * Prev button
+     */
     prevButton.on('press', () => {
       (displayIndex > 0) ? displayIndex-- : displayIndex = 2;
       display();
       screenOn();
     });
 
+    /**
+     * Next button
+     */
     nextButton.on('press', () => {
       (displayIndex < 2) ? displayIndex++ : displayIndex = 0;
       display();
       screenOn();
     });
 
-    // Indoor Temperature
+    /**
+     * Indoor temperature sensor
+     */
     new five.Thermometer({
       pin: 'A0',
       freq: config.johnnyfivefreq,
@@ -87,7 +98,9 @@ export default function init() {
       saveWeather('indoorTemp', round(this.celsius));
     });
 
-    // Outdoor Temperature
+    /**
+     * Outdoor temperature sensor
+     */
     new five.Thermometer({
       controller: 'DS18B20',
       pin: 2,
@@ -96,7 +109,9 @@ export default function init() {
       saveWeather('outdoorTemp', round(this.celsius));
     });
 
-    // Pressure
+    /**
+     * Pressure sensor
+     */
     new five.Barometer({
       controller: 'BMP085',
       freq: config.johnnyfivefreq
@@ -104,12 +119,20 @@ export default function init() {
       saveWeather('pressure', round(this.pressure * 10));
     });
 
+    /**
+     * Display informations on screen
+     * 
+     */
     function display() {
       lcd.clear();
       lcd.cursor(0, 0).print(displayDate());
       lcd.cursor(1, 0).print(displayMeasure());
     }
 
+    /**
+     * Switch on the screen for 10 sec
+     * 
+     */
     function screenOn() {
       clearTimeout(screenOff);
       lcd.bgColor("ffffff");
@@ -119,7 +142,7 @@ export default function init() {
     }
 
     /**
-    * Save Weather object in database
+    * Save Weather object in database  and on screen
     * 
     * @param {any} type
     * @param {any} value
