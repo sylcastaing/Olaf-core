@@ -8,14 +8,14 @@ import jwt from 'jsonwebtoken';
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
   return function (err) {
-    res.status(statusCode).json(err);
+    return res.status(statusCode).json(err);
   }
 }
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function (err) {
-    res.status(statusCode).send(err);
+    return res.status(statusCode).send(err);
   };
 }
 
@@ -26,7 +26,7 @@ function handleError(res, statusCode) {
 export function index(req, res) {
   return User.find({}, '-salt -password').exec()
     .then(users => {
-      res.status(200).json(users);
+      return res.status(200).json(users);
     })
     .catch(handleError(res));
 }
@@ -44,7 +44,7 @@ export function create(req, res, next) {
       }, config.secrets.session, {
         expiresIn: 60 * 60 * 5
       });
-      res.json({
+      return res.json({
         token
       });
     })
@@ -62,7 +62,7 @@ export function show(req, res, next) {
       if (!user) {
         return res.status(404).end();
       }
-      res.json(user.profile);
+      return res.json(user.profile);
     })
     .catch(err => next(err));
 }
@@ -74,7 +74,7 @@ export function show(req, res, next) {
 export function destroy(req, res) {
   return User.findByIdAndRemove(req.params.id).exec()
     .then(function () {
-      res.status(204).end();
+      return res.status(204).end();
     })
     .catch(handleError(res));
 }
@@ -93,7 +93,7 @@ export function changePassword(req, res, next) {
         user.password = newPass;
         return user.save()
           .then(() => {
-            res.status(204).end();
+            return res.status(204).end();
           })
           .catch(validationError(res));
       } else {
@@ -124,5 +124,5 @@ export function me(req, res, next) {
  * Authentication callback
  */
 export function authCallback(req, res, next) {
-  res.redirect('/');
+  return res.redirect('/');
 }

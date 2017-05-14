@@ -42,7 +42,9 @@ export function isAuthenticated() {
           next();
           return user;
         })
-        .catch(err => next(err));
+        .catch(err => {
+          next(err);
+        });
     });
 }
 
