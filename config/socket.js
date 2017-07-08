@@ -19,6 +19,7 @@ function onConnect(socket) {
   require('../api/weather/weather.socket').register(socket);
   require('../api/remote/remote.socket').register(socket);
   require('../api/irremote/irremote.socket').register(socket);
+  require('../camera/camera.socket').register(socket);
 }
 
 export default function(socketio) {

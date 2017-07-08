@@ -45,7 +45,7 @@ var all = {
   userRoles: ['user', 'admin'],
 
   arduinoPorts: {
-    johnnyFive: 'COM3',
+    johnnyFive: '/dev/tty7',
     irRemote: 'COM4'
   },
 

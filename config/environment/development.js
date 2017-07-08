@@ -6,12 +6,12 @@ module.exports = {
 
   // MongoDB connection options
   mongo: {
-    uri: 'mongodb://127.0.0.1/olaf-dev'
+    uri: 'mongodb://localhost/olaf-dev'
   },
 
   // Seed database on startup
   seedDB: true,
 
   // Freq in ms for weather mesure
-  johnnyfivefreq: 1000000
+  johnnyfivefreq: 60000
 };

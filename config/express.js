@@ -5,6 +5,7 @@
 'use strict';
 
 import arduino from '../arduino/';
+import camera from '../camera/';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import config from './environment';
@@ -63,9 +64,11 @@ export default function(app) {
       xssProtection: true
     }));
     arduino();
+    camera();
   }
   else if ('development' === env) {
     arduino();
+    camera();
   }
   else if ('test' === env) {
     app.use(errorHandler());
