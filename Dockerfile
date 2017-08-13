@@ -6,6 +6,8 @@ COPY package.json /usr/src/app
 
 ENV NODE_ENV production
 
+ENV MONGODB_URI "mongodb://olaf-data/mean-docker"
+
 RUN npm install
 
 COPY . /usr/src/app
