@@ -30,11 +30,13 @@ export default function init() {
 
   // Initialize Board
   var Board = new five.Board({
-    port: config.arduinoPorts.johnnyFive
+    port: config.arduinoPorts.johnnyFive,
+    repl: false,
+    debug: false
   });
 
-  Board.on('error', () => {
-
+  Board.on('error', (err) => {
+    console.error("[Board error] : " + err);
   });
 
   Board.on('ready', () => {
@@ -46,7 +48,6 @@ export default function init() {
     lcd.clear();
     lcd.bgColor("000000");
     lcd.on();
-    lcd.home().print("Wesh alors ! ");
 
     // Diplay elements on screen
     display();

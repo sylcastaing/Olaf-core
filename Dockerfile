@@ -1,5 +1,9 @@
 FROM resin/raspberry-pi-alpine-node:7.10
 
+RUN apk add freenect
+
+RUN adduser $USER plugdev
+
 WORKDIR /usr/src/app
 
 COPY package.json /usr/src/app
