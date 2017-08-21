@@ -11,11 +11,19 @@ export function register(socket) {
 
     socket.on('disconnect', removeListener('weather:' + events[i], listener));
   }
+
+  socket.on('join-weather', () => {
+    socket.join('weather');
+  });
+
+  socket.on('leave-weather', () => {
+    socket.leave('weather');
+  });
 }
 
 function createListener(event, socket) {
   return function (doc) {
-    socket.emit(event, doc);
+    socket.in('weather').emit(event, doc);
   };
 }
 

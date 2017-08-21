@@ -21,4 +21,4 @@ while 1:
     print filename
     sys.stdout.flush()
 
-    time.sleep(0.2)
+    time.sleep(0.3)

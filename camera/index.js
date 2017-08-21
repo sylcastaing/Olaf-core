@@ -27,16 +27,16 @@ function init() {
       fs.unlinkSync(__dirname + '/tmp/' + fileName);
     })
     .on('error', (error) => {
-      console.log('Camera error %s', error);
+      console.error('Camera error %s', error);
     });
   });
 
   py.on('exit', (code) => {
-    console.log('Process quit with code : ' + code);
+    console.info('Process quit with code : ' + code);
   });
 
   py.stderr.on('data', (data) => {
-    console.log(uint8arrayToString(data));
+    console.error(uint8arrayToString(data));
   });
 }
 
